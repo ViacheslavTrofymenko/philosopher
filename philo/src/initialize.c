@@ -5,62 +5,70 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: vtrofyme <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/11 16:19:16 by vtrofyme          #+#    #+#             */
-/*   Updated: 2025/08/11 16:28:13 by vtrofyme         ###   ########.fr       */
+/*   Created: 2025/08/11 23:05:26 by vtrofyme          #+#    #+#             */
+/*   Updated: 2025/08/11 23:53:52 by vtrofyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+# include "philo.h"
 
-int	init_mutexes(t_program *program)
+static void init_philo(t_program *pm, size_t i);
+
+int	init_mutexes(t_program *pm)
 {
-	int i;
+	size_t	i;
 
-	if (pthread_mutex_init(&program->dead_lock, NULL))
-		return (printf("Error: failed to init dead_lock\n"), 1);
-	if (pthread_mutex_init(&program->meal_lock, NULL))
-		return (printf("Error: failed to init meal_lock\n"), 1);
-	if (pthread_mutex_init(&program->write_lock, NULL))
-		return (printf("Error: failed to init write_lock\n"), 1);
-	program->forks = malloc(sizeof(pthread_mutex_t) * program->num_of_philos);
-	if (!program->forks)
+	pm->forks = malloc(sizeof(pthread_mutex_t) * pm->num_of_philos);
+	if (!pm->forks)
 		return (printf("Error: malloc forks failed\n"), 1);
-
 	i = 0;
-	while (i < (int)program->num_of_philos)
+	while(++i < pm->num_of_philos)
 	{
-		if (pthread_mutex_init(&program->forks[i], NULL))
-			return (printf("Error: failed to init fork mutex\n"), 1);
+		if (pthread_mutex_init(&pm->forks[i], NULL) != 0)
+			return (printf("Error: fork init failed\n"), 1);
+	}
+	if (pthread_mutex_init(&pm->dead_lock, NULL) != 0)
+		return (printf("Error: dead_lock init failed\n"), 1);
+	if (pthread_mutex_init(&pm->meal_lock, NULL) != 0)
+		return (printf("Error: meal_lock init failed\n"), 1);
+	if (pthread_mutex_init(&pm->write_lock, NULL) != 0)
+		return (printf("Error: write_lock init failed\n"), 1);
+	return (0);
+}
+int	init_philos(t_program *pm)
+{
+	size_t	i;
+
+	pm->philos = malloc(sizeof(t_philo) * pm->num_of_philos);
+	if (!pm->philos)
+		return (printf("Error: malloc philo failed\n"), 1);
+	i = 0;
+	while (i < pm->num_of_philos)
+	{
+		init_philo(pm, i);
 		i++;
 	}
 	return (0);
 }
-int init_philos(t_program *program)
-{
-	size_t i;
 
-	program->philos = malloc(sizeof(t_philo) * program->num_of_philos);
-	if (!program->philos)
-		return (printf("Error: malloc philos failed\n"), 1);
-	i = 0;
-	while (++i < program->num_of_philos)
-	{
-		program->philos[i].id = (int)(i + 1);
-		program->philos[i].num_of_philos = program->num_of_philos;
-		program->philos[i].num_times_to_eat = program->num_times_to_eat;
-		program->philos[i].time_to_die = program->time_to_die;
-		program->philos[i].time_to_eat = program->time_to_eat;
-		program->philos[i].time_to_sleep = program->time_to_sleep;
-		program->philos[i].dead = &program->dead_flag;
-		program->philos[i].eating = false;
-		program->philos[i].meals_eaten = 0;
-		program->philos[i].last_meal = 0;
-		program->philos[i].start_time = ft_get_current_time();
-		program->philos[i].write_lock = &program->write_lock;
-		program->philos[i].dead_lock = &program->dead_lock;
-		program->philos[i].meal_lock = &program->meal_lock;
-		program->philos[i].l_fork = &program->forks[i];
-		program->philos[i].r_fork = &program->forks[(i + 1) % program->num_of_philos];
-	}
-	return (0);
+static void init_philo(t_program *pm, size_t i)
+{
+	t_philo	*philo;
+
+	philo = &pm->philos[i];
+	philo->id = (int)(i + 1);
+	philo->meals_eaten = 0;
+	philo->num_times_to_eat = pm->num_times_to_eat;
+	philo->eating = false;
+	philo->dead = &pm->dead_flag;
+	philo->last_meal = 0;
+	philo->time_to_die = pm->time_to_die;
+    philo->time_to_eat = pm->time_to_eat;
+    philo->time_to_sleep = pm->time_to_sleep;
+    philo->start_time = 0;
+    philo->write_lock = &pm->write_lock;
+    philo->dead_lock = &pm->dead_lock;
+    philo->meal_lock = &pm->meal_lock;
+    philo->l_fork = &pm->forks[i];
+    philo->r_fork = &pm->forks[(i + 1) % pm->num_of_philos];
 }

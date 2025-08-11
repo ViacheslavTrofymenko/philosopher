@@ -6,7 +6,7 @@
 /*   By: vtrofyme <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/09 10:10:22 by vtrofyme          #+#    #+#             */
-/*   Updated: 2025/08/11 16:26:01 by vtrofyme         ###   ########.fr       */
+/*   Updated: 2025/08/11 23:56:59 by vtrofyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ typedef struct s_philo
 	int				num_times_to_eat;
 	bool			eating;
 	bool			*dead;
-	size_t			num_of_philos;
 	size_t			last_meal;
 	size_t			time_to_die;
 	size_t			time_to_eat;
@@ -58,6 +57,9 @@ typedef struct s_program
 	t_philo			*philos;
 }					t_program;
 
-int	parse_args(int argc, char *argv[], t_program *program);
+int		parse_args(int argc, char *argv[], t_program *pm);
+int		init_mutexes(t_program *pm);
+int		init_philos(t_program *pm);
+void	free_all(t_program *pm);
 
 #endif
