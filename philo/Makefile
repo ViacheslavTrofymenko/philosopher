@@ -6,7 +6,7 @@
 #    By: vtrofyme <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/09 10:43:22 by vtrofyme          #+#    #+#              #
-#    Updated: 2025/08/09 13:30:54 by vtrofyme         ###   ########.fr        #
+#    Updated: 2025/08/11 16:15:55 by vtrofyme         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,16 +20,18 @@ NAME			= philo
 SRC_DIR			= src
 OBJ_DIR			= obj
 INCLUDE_DIR		= include
-SRC				= $(addprefix $(SRC_DIR)/, philo_main.c)
+SRC				= $(addprefix $(SRC_DIR)/, philo_main.c parse_args.c)
+TOTAL_SRCS 		:= $(words $(SRC))
 OBJ				= $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 CC 				= cc
 CFLAGS			= -Wall -Wextra -Werror #-g3 -fsanitize=thread #-fsanitize=leak
 INCLUDES		= -I$(INCLUDE_DIR)
+RM 				= rm -rf
 
 all: $(NAME)
 
 $(NAME):$(OBJ)
-	@$(CC) $(CFLAGS) $(OBJ) $(INCLUDES) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJ) $(INCLUDES) -lpthread -o $(NAME)
 	@echo
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
@@ -49,11 +51,9 @@ $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
 
 clean:
-	$(MAKE) -C libft clean
 	$(RM) $(OBJ_DIR)
 
 fclean: clean
-	$(MAKE) -C libft fclean
 	$(RM) $(NAME)
 
 re: fclean all

@@ -6,28 +6,21 @@
 /*   By: vtrofyme <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/09 10:10:25 by vtrofyme          #+#    #+#             */
-/*   Updated: 2025/08/09 13:04:16 by vtrofyme         ###   ########.fr       */
+/*   Updated: 2025/08/11 16:19:00 by vtrofyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "philo.h"
 
-int main(void)
+int main(int argc, char *argv[])
 {
-	t_philo philo;
-	struct	timeval	tv;
-	long	seconds;
-	long	microseconds;
-	long	milliseconds;
+	t_program	program;
 
-	seconds = tv.tv_sec;
-	microseconds = tv.tv_usec;
-	milliseconds = (seconds / 1000 + microseconds * 1000);
+	if(parse_args(argc, argv, &program))
+		return (1);
+	if(init_mutexes(&program))
+		return (1);
+	init_philos(&program);
 
-	gettimeofday(&tv, NULL);
-
-	printf("\tid=%d last_meal_time=%ld eat_count=%d \n", philo.id, philo.last_meal_time, philo.eat_count);
-	memset(&philo, 0, sizeof(philo));
-	printf("\tid=%d last_meal_time=%ld eat_count=%d \n", philo.id, philo.last_meal_time, philo.eat_count);
 	return (0);
 }
