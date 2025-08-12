@@ -6,7 +6,7 @@
 /*   By: vtrofyme <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 23:05:26 by vtrofyme          #+#    #+#             */
-/*   Updated: 2025/08/11 23:53:52 by vtrofyme         ###   ########.fr       */
+/*   Updated: 2025/08/12 13:38:02 by vtrofyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,11 @@ static void init_philo(t_program *pm, size_t i)
 	philo->num_times_to_eat = pm->num_times_to_eat;
 	philo->eating = false;
 	philo->dead = &pm->dead_flag;
-	philo->last_meal = 0;
+	philo->last_meal = get_timestamp();
 	philo->time_to_die = pm->time_to_die;
     philo->time_to_eat = pm->time_to_eat;
     philo->time_to_sleep = pm->time_to_sleep;
-    philo->start_time = 0;
+    philo->start_time = get_timestamp();
     philo->write_lock = &pm->write_lock;
     philo->dead_lock = &pm->dead_lock;
     philo->meal_lock = &pm->meal_lock;
