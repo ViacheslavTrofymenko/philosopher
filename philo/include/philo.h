@@ -6,7 +6,7 @@
 /*   By: vtrofyme <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/09 10:10:22 by vtrofyme          #+#    #+#             */
-/*   Updated: 2025/08/12 14:38:36 by vtrofyme         ###   ########.fr       */
+/*   Updated: 2025/08/13 15:39:08 by vtrofyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,12 @@
 # include <limits.h>
 # include <stdbool.h>
 
+# define C_RED "\001\x1B[31m\002"
+# define C_GRN "\001\x1B[32m\002"
+# define C_YELLOW "\001\x1B[33m\002"
+# define C_BLU "\001\x1B[34m\002"
+# define C_MAG "\001\x1B[35m\002"
+# define C_RESET "\001\x1B[0m\002"
 typedef struct s_philo
 {
 	pthread_t		thread;

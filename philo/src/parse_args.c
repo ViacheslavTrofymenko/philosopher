@@ -6,7 +6,7 @@
 /*   By: vtrofyme <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 13:00:04 by vtrofyme          #+#    #+#             */
-/*   Updated: 2025/08/11 16:09:32 by vtrofyme         ###   ########.fr       */
+/*   Updated: 2025/08/13 15:34:14 by vtrofyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,32 +49,32 @@ int	check_input(char *arg)
 	return (0);
 }
 
-int	parse_args(int argc, char *argv[], t_program *program)
+int	parse_args(int argc, char *argv[], t_program *pm)
 {
 	int	i;
 
 	if (argc != 5 && argc != 6)
-		return (printf("Error: wrong number of arguments\n"));
+		return (printf(C_RED "Error: wrong number of arguments.\n" C_RESET));
 	i = 1;
 	while (argv[++i])
 	{
 		if (check_input(argv[i]) == 1)
-			return (printf("Error: invalid argument values\n"), 1);
+			return (printf(C_RED "Error: invalid argument values.\n" C_RESET), 1);
 	}
-	program->num_of_philos = (size_t)ft_atol(argv[1]);
-	program->time_to_die = (size_t)ft_atol(argv[2]);
-	program->time_to_eat = (size_t)ft_atol(argv[3]);
-	program->time_to_sleep = (size_t)ft_atol(argv[4]);
-	program->num_times_to_eat = -1;
+	pm->num_of_philos = (size_t)ft_atol(argv[1]);
+	pm->time_to_die = (size_t)ft_atol(argv[2]);
+	pm->time_to_eat = (size_t)ft_atol(argv[3]);
+	pm->time_to_sleep = (size_t)ft_atol(argv[4]);
+	pm->num_times_to_eat = -1;
 	if (argc == 6)
-		program->num_times_to_eat = (int)ft_atol(argv[5]);
-	if (program->num_of_philos == 0)
-		return (printf("Error: number of philosophers must be greater than 1\n"), 1);
-	if (program->time_to_die == 0 || program->time_to_eat == 0 || program->time_to_sleep == 0)
-		return (printf("Error: time arguments must be greater than zero\n"), 1);
-	if (program->num_times_to_eat < -1)
-		return (printf("Error: number of times to eat must be >= 0 or omitted\n"), 1);
-	program->dead_flag = false;
+		pm->num_times_to_eat = (int)ft_atol(argv[5]);
+	if (pm->num_of_philos == 0)
+		return (printf(C_RED "Error: number of philosophers must be greater than 1.\n" C_RESET), 1);
+	if (pm->time_to_die == 0 || pm->time_to_eat == 0 || pm->time_to_sleep == 0)
+		return (printf(C_RED "Error: time arguments must be greater than zero.\n" C_RESET), 1);
+	if (pm->num_times_to_eat < -1)
+		return (printf(C_RED "Error: number of times to eat must be >= 0 or omitted.\n" C_RESET), 1);
+	pm->dead_flag = false;
 	return (0);
 }
 

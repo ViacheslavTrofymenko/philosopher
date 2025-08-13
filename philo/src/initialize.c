@@ -6,7 +6,7 @@
 /*   By: vtrofyme <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 23:05:26 by vtrofyme          #+#    #+#             */
-/*   Updated: 2025/08/12 13:38:02 by vtrofyme         ###   ########.fr       */
+/*   Updated: 2025/08/13 15:34:04 by vtrofyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,19 @@ int	init_mutexes(t_program *pm)
 
 	pm->forks = malloc(sizeof(pthread_mutex_t) * pm->num_of_philos);
 	if (!pm->forks)
-		return (printf("Error: malloc forks failed\n"), 1);
+		return (printf(C_RED "Error: malloc forks failed.\n" C_RESET), 1);
 	i = 0;
 	while(++i < pm->num_of_philos)
 	{
 		if (pthread_mutex_init(&pm->forks[i], NULL) != 0)
-			return (printf("Error: fork init failed\n"), 1);
+			return (printf(C_RED "Error: fork init failed.\n" C_RESET), 1);
 	}
 	if (pthread_mutex_init(&pm->dead_lock, NULL) != 0)
-		return (printf("Error: dead_lock init failed\n"), 1);
+		return (printf(C_RED "Error: dead_lock init failed.\n" C_RESET), 1);
 	if (pthread_mutex_init(&pm->meal_lock, NULL) != 0)
-		return (printf("Error: meal_lock init failed\n"), 1);
+		return (printf(C_RED "Error: meal_lock init failed.\n" C_RESET), 1);
 	if (pthread_mutex_init(&pm->write_lock, NULL) != 0)
-		return (printf("Error: write_lock init failed\n"), 1);
+		return (printf(C_RED "Error: write_lock init failed.\n" C_RESET), 1);
 	return (0);
 }
 int	init_philos(t_program *pm)
@@ -41,7 +41,7 @@ int	init_philos(t_program *pm)
 
 	pm->philos = malloc(sizeof(t_philo) * pm->num_of_philos);
 	if (!pm->philos)
-		return (printf("Error: malloc philo failed\n"), 1);
+		return (printf(C_RED "Error: malloc philo failed.\n" C_RESET), 1);
 	i = 0;
 	while (i < pm->num_of_philos)
 	{

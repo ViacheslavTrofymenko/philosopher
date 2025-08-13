@@ -6,7 +6,7 @@
 /*   By: vtrofyme <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 12:46:22 by vtrofyme          #+#    #+#             */
-/*   Updated: 2025/08/12 13:39:22 by vtrofyme         ###   ########.fr       */
+/*   Updated: 2025/08/13 15:38:08 by vtrofyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ void	*philo_routine(void *arg)
 		eat(philo);
 		if (philo->num_times_to_eat != -1 && philo->meals_eaten >= philo->num_times_to_eat)
 			break ;
-		print_status(philo, "is sleeping");
+		print_status(philo, C_BLU "is sleeping" C_RESET);
 		ft_usleep(philo->time_to_sleep);
-		print_status(philo, "is thinking");
+		print_status(philo, C_YELLOW "is thinking" C_RESET);
 	}
 	return (NULL);
 }
@@ -59,14 +59,14 @@ static void	print_status(t_philo *philo, char *status)
 static void	eat(t_philo *philo)
 {
 	pthread_mutex_lock(philo->l_fork);
-	print_status(philo, "has taken a fork");
+	print_status(philo, C_MAG "has taken a fork" C_RESET);
 	pthread_mutex_lock(philo->r_fork);
-	print_status(philo, "has taken a fork");
+	print_status(philo, C_MAG "has taken a fork" C_RESET);
 	pthread_mutex_lock(philo->meal_lock);
 	philo->last_meal = get_timestamp();
 	philo->meals_eaten++;
 	pthread_mutex_unlock(philo->meal_lock);
-	print_status(philo, "is eating");
+	print_status(philo, C_GRN "is eating" C_RESET);
 	ft_usleep(philo->time_to_eat);
 	pthread_mutex_unlock(philo->r_fork);
 	pthread_mutex_unlock(philo->l_fork);
