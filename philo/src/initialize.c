@@ -6,7 +6,7 @@
 /*   By: vtrofyme <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 23:05:26 by vtrofyme          #+#    #+#             */
-/*   Updated: 2025/08/13 15:34:04 by vtrofyme         ###   ########.fr       */
+/*   Updated: 2025/08/13 16:23:28 by vtrofyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,12 @@ static void init_philo(t_program *pm, size_t i)
 	philo->dead = &pm->dead_flag;
 	philo->last_meal = get_timestamp();
 	philo->time_to_die = pm->time_to_die;
-    philo->time_to_eat = pm->time_to_eat;
-    philo->time_to_sleep = pm->time_to_sleep;
-    philo->start_time = get_timestamp();
-    philo->write_lock = &pm->write_lock;
-    philo->dead_lock = &pm->dead_lock;
-    philo->meal_lock = &pm->meal_lock;
-    philo->l_fork = &pm->forks[i];
-    philo->r_fork = &pm->forks[(i + 1) % pm->num_of_philos];
+	philo->time_to_eat = pm->time_to_eat;
+	philo->time_to_sleep = pm->time_to_sleep;
+	philo->start_time = get_timestamp();
+	philo->write_lock = &pm->write_lock;
+	philo->dead_lock = &pm->dead_lock;
+	philo->meal_lock = &pm->meal_lock;
+	philo->l_fork = &pm->forks[i];
+	philo->r_fork = &pm->forks[(i + 1) % pm->num_of_philos];
 }

@@ -6,7 +6,7 @@
 #    By: vtrofyme <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/09 10:43:22 by vtrofyme          #+#    #+#              #
-#    Updated: 2025/08/13 14:35:19 by vtrofyme         ###   ########.fr        #
+#    Updated: 2025/08/13 16:18:44 by vtrofyme         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ SRC				= $(addprefix $(SRC_DIR)/, philo_main.c parse_args.c free_utils.c initial
 TOTAL_SRCS 		:= $(words $(SRC))
 OBJ				= $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 CC 				= cc
-CFLAGS			= -Wall -Wextra -Werror -g -fsanitize=address #-fsanitize=thread #-fsanitize=leak
+CFLAGS			= -Wall -Wextra -Werror -g #-fsanitize=thread #-fsanitize=leak
 INCLUDES		= -I$(INCLUDE_DIR)
 RM 				= rm -rf
 

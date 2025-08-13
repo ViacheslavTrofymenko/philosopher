@@ -6,7 +6,7 @@
 /*   By: vtrofyme <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/09 10:10:25 by vtrofyme          #+#    #+#             */
-/*   Updated: 2025/08/13 15:23:08 by vtrofyme         ###   ########.fr       */
+/*   Updated: 2025/08/13 16:24:30 by vtrofyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,18 @@ int main(int argc, char *argv[])
 	if (init_philos(&pm))
 		return(free_all(&pm), 1);
 	i = 0;
-	while (++i < pm.num_of_philos)
+	while (i < pm.num_of_philos)
+	{
 		pthread_create(&pm.philos[i].thread, NULL, philo_routine, &pm.philos[i]);
+		i++;
+	}
 	monitor(&pm);
 	i = 0;
-	while (++i < pm.num_of_philos)
+	while (i < pm.num_of_philos)
+	{
 		pthread_join(pm.philos[i].thread, NULL);
+		i++;
+	}
 	free_all(&pm);
 	return (0);
 }
