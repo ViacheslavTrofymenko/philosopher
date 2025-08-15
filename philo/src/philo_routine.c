@@ -6,7 +6,7 @@
 /*   By: vtrofyme <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 12:46:22 by vtrofyme          #+#    #+#             */
-/*   Updated: 2025/08/15 10:42:11 by vtrofyme         ###   ########.fr       */
+/*   Updated: 2025/08/15 14:33:03 by vtrofyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,29 +55,46 @@ static void	print_status(t_philo *philo, char *status)
 {
 	size_t	timestamp;
 
-	pthread_mutex_lock(philo->write_lock);
 	if (!(*philo->dead))
 	{
 		timestamp = get_timestamp() - philo->start_time;
 		printf("%zu %d %s\n", timestamp, philo->id, status);
 	}
-	pthread_mutex_unlock(philo->write_lock);
 }
 
 static void	eat(t_philo *philo)
 {
-	pthread_mutex_lock(philo->l_fork);
-	print_status(philo, C_MAG "has taken a fork" C_RESET);
-	pthread_mutex_lock(philo->r_fork);
-	print_status(philo, C_MAG "has taken a fork" C_RESET);
+	if (philo->id % 2 == 0)
+	{
+		pthread_mutex_lock(philo->r_fork);
+		print_status(philo, C_MAG "has taken a fork" C_RESET);
+		pthread_mutex_lock(philo->l_fork);
+		print_status(philo, C_MAG "has taken a fork" C_RESET);
+
+	}
+	else
+	{
+		pthread_mutex_lock(philo->l_fork);
+		print_status(philo, C_MAG "has taken a fork" C_RESET);
+		pthread_mutex_lock(philo->r_fork);
+		print_status(philo, C_MAG "has taken a fork" C_RESET);
+	}
 	pthread_mutex_lock(philo->meal_lock);
 	philo->last_meal = get_timestamp();
 	philo->meals_eaten++;
 	pthread_mutex_unlock(philo->meal_lock);
 	print_status(philo, C_GRN "is eating" C_RESET);
 	ft_usleep(philo->time_to_eat);
-	pthread_mutex_unlock(philo->r_fork);
-	pthread_mutex_unlock(philo->l_fork);
+	if (philo->id % 2 == 0)
+	{
+		pthread_mutex_unlock(philo->l_fork);
+		pthread_mutex_unlock(philo->r_fork);
+	}
+	else
+	{
+		pthread_mutex_unlock(philo->r_fork);
+		pthread_mutex_unlock(philo->l_fork);
+	}
 }
 
 static void	ft_usleep(size_t ms)

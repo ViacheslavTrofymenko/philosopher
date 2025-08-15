@@ -6,7 +6,7 @@
 /*   By: vtrofyme <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/09 10:10:22 by vtrofyme          #+#    #+#             */
-/*   Updated: 2025/08/15 10:42:23 by vtrofyme         ###   ########.fr       */
+/*   Updated: 2025/08/15 14:25:09 by vtrofyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ typedef struct s_philo
 	size_t			num_of_philos;
 	pthread_mutex_t	*r_fork;
 	pthread_mutex_t	*l_fork;
-	pthread_mutex_t	*write_lock;
 	pthread_mutex_t	*dead_lock;
 	pthread_mutex_t	*meal_lock;
 }					t_philo;
@@ -60,7 +59,6 @@ typedef struct s_program
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	dead_lock;
 	pthread_mutex_t	meal_lock;
-	pthread_mutex_t	write_lock;
 	t_philo			*philos;
 }					t_program;
 

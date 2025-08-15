@@ -6,7 +6,7 @@
 /*   By: vtrofyme <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 13:51:49 by vtrofyme          #+#    #+#             */
-/*   Updated: 2025/08/15 10:30:03 by vtrofyme         ###   ########.fr       */
+/*   Updated: 2025/08/15 13:39:38 by vtrofyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,8 @@ void	monitor(t_program *pm)
 				pthread_mutex_lock(&pm->dead_lock);
 				pm->dead_flag = true;
 				pthread_mutex_unlock(&pm->dead_lock);
-				pthread_mutex_lock(&pm->write_lock);
-				printf("Hello\n");
 				printf(C_RED "%zu %d died\n" C_RESET, get_timestamp() - pm->philos[i].start_time,
 					pm->philos[i].id);
-				pthread_mutex_unlock(&pm->write_lock);
 				return ;
 			}
 			pthread_mutex_unlock(&pm->meal_lock);

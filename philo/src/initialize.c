@@ -6,7 +6,7 @@
 /*   By: vtrofyme <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 23:05:26 by vtrofyme          #+#    #+#             */
-/*   Updated: 2025/08/15 10:43:13 by vtrofyme         ###   ########.fr       */
+/*   Updated: 2025/08/15 14:25:46 by vtrofyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,6 @@ int	init_mutexes(t_program *pm)
 		return (printf(C_RED "Error: dead_lock init failed.\n" C_RESET), 1);
 	if (pthread_mutex_init(&pm->meal_lock, NULL) != 0)
 		return (printf(C_RED "Error: meal_lock init failed.\n" C_RESET), 1);
-	if (pthread_mutex_init(&pm->write_lock, NULL) != 0)
-		return (printf(C_RED "Error: write_lock init failed.\n" C_RESET), 1);
 	return (0);
 }
 int	init_philos(t_program *pm)
@@ -66,7 +64,6 @@ static void init_philo(t_program *pm, size_t i)
 	philo->time_to_eat = pm->time_to_eat;
 	philo->time_to_sleep = pm->time_to_sleep;
 	philo->start_time = get_timestamp();
-	philo->write_lock = &pm->write_lock;
 	philo->dead_lock = &pm->dead_lock;
 	philo->meal_lock = &pm->meal_lock;
 	philo->l_fork = &pm->forks[i];
