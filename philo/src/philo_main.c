@@ -6,7 +6,7 @@
 /*   By: vtrofyme <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/09 10:10:25 by vtrofyme          #+#    #+#             */
-/*   Updated: 2025/08/15 10:31:26 by vtrofyme         ###   ########.fr       */
+/*   Updated: 2025/08/15 20:15:43 by vtrofyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int main(int argc, char *argv[])
 	t_program	pm;
 	size_t		i;
 
+	memset(&pm, 0, sizeof(pm));
 	if(parse_args(argc, argv, &pm))
 		return (1);
 	if(init_mutexes(&pm))

@@ -6,7 +6,7 @@
 /*   By: vtrofyme <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 12:46:22 by vtrofyme          #+#    #+#             */
-/*   Updated: 2025/08/15 14:33:03 by vtrofyme         ###   ########.fr       */
+/*   Updated: 2025/08/15 20:54:44 by vtrofyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,18 @@ void	*philo_routine(void *arg)
 		pthread_mutex_unlock(philo->l_fork);
 		return (NULL);
 	}
-	while (!(*philo->dead))
+	while (1)
 	{
+		pthread_mutex_lock(philo->dead_lock);
+		if (*(philo->dead))
+		{
+			pthread_mutex_unlock(philo->dead_lock);
+			break ;
+		}
+		pthread_mutex_unlock(philo->dead_lock);
+
 		eat(philo);
+
 		if (philo->num_times_to_eat != -1 && philo->meals_eaten >= philo->num_times_to_eat)
 			break ;
 		print_status(philo, C_BLU "is sleeping" C_RESET);
@@ -53,13 +62,17 @@ void	*philo_routine(void *arg)
 
 static void	print_status(t_philo *philo, char *status)
 {
-	size_t	timestamp;
+	size_t timestamp;
 
-	if (!(*philo->dead))
-	{
-		timestamp = get_timestamp() - philo->start_time;
-		printf("%zu %d %s\n", timestamp, philo->id, status);
-	}
+    pthread_mutex_lock(philo->print_lock);
+    pthread_mutex_lock(philo->dead_lock);
+
+    if (!*philo->dead) {
+        timestamp = get_timestamp() - philo->start_time;
+        printf("%zu %d %s\n", timestamp, philo->id, status);
+    }
+    pthread_mutex_unlock(philo->dead_lock);
+    pthread_mutex_unlock(philo->print_lock);
 }
 
 static void	eat(t_philo *philo)

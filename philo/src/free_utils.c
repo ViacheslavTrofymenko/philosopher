@@ -6,7 +6,7 @@
 /*   By: vtrofyme <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 22:27:26 by vtrofyme          #+#    #+#             */
-/*   Updated: 2025/08/15 13:39:21 by vtrofyme         ###   ########.fr       */
+/*   Updated: 2025/08/15 19:53:07 by vtrofyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static void	destroy_mutexes(t_program *pm)
 {
 	size_t	i;
 
-	if (pm->forks)
+	if (pm->forks && pm->forks_initialized)
 	{
 		i = 0;
 		while (i < pm->num_of_philos)
@@ -42,6 +42,10 @@ static void	destroy_mutexes(t_program *pm)
 			i++;
 		}
 	}
-	pthread_mutex_destroy(&pm->dead_lock);
-	pthread_mutex_destroy(&pm->meal_lock);
+	if (pm->locks_initialized)
+	{
+		pthread_mutex_destroy(&pm->dead_lock);
+		pthread_mutex_destroy(&pm->meal_lock);
+		pthread_mutex_destroy(&pm->print_lock);
+	}
 }
