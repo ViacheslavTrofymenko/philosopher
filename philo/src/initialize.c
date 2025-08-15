@@ -6,7 +6,7 @@
 /*   By: vtrofyme <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 23:05:26 by vtrofyme          #+#    #+#             */
-/*   Updated: 2025/08/13 16:23:28 by vtrofyme         ###   ########.fr       */
+/*   Updated: 2025/08/15 10:43:13 by vtrofyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	init_mutexes(t_program *pm)
 	pm->forks = malloc(sizeof(pthread_mutex_t) * pm->num_of_philos);
 	if (!pm->forks)
 		return (printf(C_RED "Error: malloc forks failed.\n" C_RESET), 1);
-	i = 0;
+	i = -1;
 	while(++i < pm->num_of_philos)
 	{
 		if (pthread_mutex_init(&pm->forks[i], NULL) != 0)
@@ -71,4 +71,5 @@ static void init_philo(t_program *pm, size_t i)
 	philo->meal_lock = &pm->meal_lock;
 	philo->l_fork = &pm->forks[i];
 	philo->r_fork = &pm->forks[(i + 1) % pm->num_of_philos];
+	philo->num_of_philos = pm->num_of_philos;
 }

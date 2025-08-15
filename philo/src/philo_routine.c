@@ -6,7 +6,7 @@
 /*   By: vtrofyme <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 12:46:22 by vtrofyme          #+#    #+#             */
-/*   Updated: 2025/08/13 15:38:08 by vtrofyme         ###   ########.fr       */
+/*   Updated: 2025/08/15 10:42:11 by vtrofyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,14 @@ void	*philo_routine(void *arg)
 	philo = (t_philo *)arg;
 	if (philo->id % 2 == 0)
 		usleep(1000);
+	if (philo->num_of_philos == 1)
+	{
+		pthread_mutex_lock(philo->l_fork);
+		print_status(philo, "has taken a fork");
+		ft_usleep(philo->time_to_die);
+		pthread_mutex_unlock(philo->l_fork);
+		return (NULL);
+	}
 	while (!(*philo->dead))
 	{
 		eat(philo);

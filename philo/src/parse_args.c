@@ -6,7 +6,7 @@
 /*   By: vtrofyme <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 13:00:04 by vtrofyme          #+#    #+#             */
-/*   Updated: 2025/08/13 15:34:14 by vtrofyme         ###   ########.fr       */
+/*   Updated: 2025/08/15 10:00:26 by vtrofyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	parse_args(int argc, char *argv[], t_program *pm)
 
 	if (argc != 5 && argc != 6)
 		return (printf(C_RED "Error: wrong number of arguments.\n" C_RESET));
-	i = 1;
+	i = 0;
 	while (argv[++i])
 	{
 		if (check_input(argv[i]) == 1)
