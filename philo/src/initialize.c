@@ -6,7 +6,7 @@
 /*   By: vtrofyme <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 23:05:26 by vtrofyme          #+#    #+#             */
-/*   Updated: 2025/08/15 19:54:32 by vtrofyme         ###   ########.fr       */
+/*   Updated: 2025/08/17 15:44:41 by vtrofyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,15 @@ int	init_mutexes(t_program *pm)
 {
 	size_t	i;
 
-	pm->forks = malloc(sizeof(pthread_mutex_t) * pm->num_of_philos);
+	pm->forks = malloc(sizeof(t_fork) * pm->num_of_philos);
 	if (!pm->forks)
 		return (printf(C_RED "Error: malloc forks failed.\n" C_RESET), 1);
 	i = -1;
 	while(++i < pm->num_of_philos)
 	{
-		if (pthread_mutex_init(&pm->forks[i], NULL) != 0)
+		if (pthread_mutex_init(&pm->forks[i].mutex, NULL) != 0)
 			return (printf(C_RED "Error: fork init failed.\n" C_RESET), 1);
+		pm->forks[i].in_use = false;
 	}
 	if (pthread_mutex_init(&pm->dead_lock, NULL) != 0)
 		return (printf(C_RED "Error: dead_lock init failed.\n" C_RESET), 1);

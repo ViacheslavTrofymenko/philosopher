@@ -6,7 +6,7 @@
 /*   By: vtrofyme <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 22:27:26 by vtrofyme          #+#    #+#             */
-/*   Updated: 2025/08/15 19:53:07 by vtrofyme         ###   ########.fr       */
+/*   Updated: 2025/08/17 15:45:51 by vtrofyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static void	destroy_mutexes(t_program *pm)
 		i = 0;
 		while (i < pm->num_of_philos)
 		{
-			pthread_mutex_destroy(&pm->forks[i]);
+			pthread_mutex_destroy(&pm->forks[i].mutex);
 			i++;
 		}
 	}
