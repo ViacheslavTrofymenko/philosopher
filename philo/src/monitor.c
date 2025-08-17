@@ -6,7 +6,7 @@
 /*   By: vtrofyme <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 13:51:49 by vtrofyme          #+#    #+#             */
-/*   Updated: 2025/08/15 20:24:56 by vtrofyme         ###   ########.fr       */
+/*   Updated: 2025/08/17 13:42:28 by vtrofyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,15 @@ void	monitor(t_program *pm)
 
 	while (1)
 	{
-		i = -1;
-		while (++i < pm->num_of_philos)
+		if (all_have_eaten(pm))
+		{
+			pthread_mutex_lock(&pm->dead_lock);
+			pm->dead_flag = true;
+			pthread_mutex_unlock(&pm->dead_lock);
+			return ;
+		}
+		i = 0;
+		while (i < pm->num_of_philos)
 		{
 			pthread_mutex_lock(&pm->meal_lock);
 			if ((get_timestamp() - pm->philos[i].last_meal) > pm->time_to_die)
@@ -31,21 +38,16 @@ void	monitor(t_program *pm)
 				pm->dead_flag = true;
 				pthread_mutex_unlock(&pm->dead_lock);
 				pthread_mutex_lock(&pm->print_lock);
-				printf(C_RED "%zu %d died\n" C_RESET, get_timestamp() - pm->philos[i].start_time,
+				printf(C_RED "%zu %d died\n" C_RESET,
+					get_timestamp() - pm->philos[i].start_time,
 					pm->philos[i].id);
 				pthread_mutex_unlock(&pm->print_lock);
 				return ;
 			}
 			pthread_mutex_unlock(&pm->meal_lock);
+			i++;
 		}
-		if (all_have_eaten(pm))
-		{
-			pthread_mutex_lock(&pm->dead_lock);
-			pm->dead_flag = true;
-			pthread_mutex_unlock(&pm->dead_lock);
-			return ;
-		}
-		usleep(1000);
+		usleep(500);
 	}
 }
 
