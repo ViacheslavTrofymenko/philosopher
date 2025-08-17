@@ -6,13 +6,14 @@
 /*   By: vtrofyme <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 13:51:49 by vtrofyme          #+#    #+#             */
-/*   Updated: 2025/08/17 13:42:28 by vtrofyme         ###   ########.fr       */
+/*   Updated: 2025/08/17 16:02:38 by vtrofyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "philo.h"
+#include "philo.h"
 
 static bool	all_have_eaten(t_program *pm);
+static bool	check_philosopher_death(t_program *pm, size_t i);
 
 void	monitor(t_program *pm)
 {
@@ -30,21 +31,8 @@ void	monitor(t_program *pm)
 		i = 0;
 		while (i < pm->num_of_philos)
 		{
-			pthread_mutex_lock(&pm->meal_lock);
-			if ((get_timestamp() - pm->philos[i].last_meal) > pm->time_to_die)
-			{
-				pthread_mutex_unlock(&pm->meal_lock);
-				pthread_mutex_lock(&pm->dead_lock);
-				pm->dead_flag = true;
-				pthread_mutex_unlock(&pm->dead_lock);
-				pthread_mutex_lock(&pm->print_lock);
-				printf(C_RED "%zu %d died\n" C_RESET,
-					get_timestamp() - pm->philos[i].start_time,
-					pm->philos[i].id);
-				pthread_mutex_unlock(&pm->print_lock);
+			if (check_philosopher_death(pm, i))
 				return ;
-			}
-			pthread_mutex_unlock(&pm->meal_lock);
 			i++;
 		}
 		usleep(500);
@@ -61,11 +49,31 @@ static bool	all_have_eaten(t_program *pm)
 	while (i < pm->num_of_philos)
 	{
 		pthread_mutex_lock(&pm->meal_lock);
-		if (pm->philos[i].num_times_to_eat != -1 &&
-			pm->philos[i].meals_eaten >= pm->philos[i].num_times_to_eat)
+		if (pm->philos[i].num_times_to_eat != -1
+			&& pm->philos[i].meals_eaten >= pm->philos[i].num_times_to_eat)
 			full_count++;
 		pthread_mutex_unlock(&pm->meal_lock);
 		i++;
 	}
 	return (full_count == (int)pm->num_of_philos);
+}
+
+static bool	check_philosopher_death(t_program *pm, size_t i)
+{
+	pthread_mutex_lock(&pm->meal_lock);
+	if ((get_timestamp() - pm->philos[i].last_meal) > pm->time_to_die)
+	{
+		pthread_mutex_unlock(&pm->meal_lock);
+		pthread_mutex_lock(&pm->dead_lock);
+		pm->dead_flag = true;
+		pthread_mutex_unlock(&pm->dead_lock);
+		pthread_mutex_lock(&pm->print_lock);
+		printf(C_RED "%zu %d died\n" C_RESET,
+			get_timestamp() - pm->philos[i].start_time,
+			pm->philos[i].id);
+		pthread_mutex_unlock(&pm->print_lock);
+		return (true);
+	}
+	pthread_mutex_unlock(&pm->meal_lock);
+	return (false);
 }

@@ -6,13 +6,13 @@
 /*   By: vtrofyme <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 23:05:26 by vtrofyme          #+#    #+#             */
-/*   Updated: 2025/08/17 15:44:41 by vtrofyme         ###   ########.fr       */
+/*   Updated: 2025/08/17 15:53:09 by vtrofyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "philo.h"
+#include "philo.h"
 
-static void init_philo(t_program *pm, size_t i);
+static void	init_philo(t_program *pm, size_t i);
 
 int	init_mutexes(t_program *pm)
 {
@@ -22,7 +22,7 @@ int	init_mutexes(t_program *pm)
 	if (!pm->forks)
 		return (printf(C_RED "Error: malloc forks failed.\n" C_RESET), 1);
 	i = -1;
-	while(++i < pm->num_of_philos)
+	while (++i < pm->num_of_philos)
 	{
 		if (pthread_mutex_init(&pm->forks[i].mutex, NULL) != 0)
 			return (printf(C_RED "Error: fork init failed.\n" C_RESET), 1);
@@ -33,11 +33,12 @@ int	init_mutexes(t_program *pm)
 	if (pthread_mutex_init(&pm->meal_lock, NULL) != 0)
 		return (printf(C_RED "Error: meal_lock init failed.\n" C_RESET), 1);
 	if (pthread_mutex_init(&pm->print_lock, NULL) != 0)
-        return (printf(C_RED "Error: print_lock init failed.\n" C_RESET), 1);
+		return (printf(C_RED "Error: print_lock init failed.\n" C_RESET), 1);
 	pm->locks_initialized = true;
 	pm->forks_initialized = true;
 	return (0);
 }
+
 int	init_philos(t_program *pm)
 {
 	size_t	i;
@@ -54,7 +55,7 @@ int	init_philos(t_program *pm)
 	return (0);
 }
 
-static void init_philo(t_program *pm, size_t i)
+static void	init_philo(t_program *pm, size_t i)
 {
 	t_philo	*philo;
 

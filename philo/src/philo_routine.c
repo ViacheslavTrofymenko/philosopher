@@ -6,7 +6,7 @@
 /*   By: vtrofyme <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 12:46:22 by vtrofyme          #+#    #+#             */
-/*   Updated: 2025/08/17 15:49:49 by vtrofyme         ###   ########.fr       */
+/*   Updated: 2025/08/17 16:03:38 by vtrofyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,11 +80,13 @@ static void	eat(t_philo *philo)
 	{
 		pthread_mutex_lock(&philo->l_fork->mutex);
 		philo->l_fork->in_use = true;
+		print_status(philo, C_MAG "has taken a fork" C_RESET);
 	}
 	if (!philo->r_fork->in_use)
 	{
 		pthread_mutex_lock(&philo->r_fork->mutex);
 		philo->r_fork->in_use = true;
+		print_status(philo, C_MAG "has taken a fork" C_RESET);
 	}
 	pthread_mutex_lock(philo->meal_lock);
 	philo->last_meal = get_timestamp();
