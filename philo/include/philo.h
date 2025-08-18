@@ -6,7 +6,7 @@
 /*   By: vtrofyme <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/09 10:10:22 by vtrofyme          #+#    #+#             */
-/*   Updated: 2025/08/18 09:50:27 by vtrofyme         ###   ########.fr       */
+/*   Updated: 2025/08/18 11:13:17 by vtrofyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,6 @@
 # define C_MAG "\001\x1B[35m\002"
 # define C_RESET "\001\x1B[0m\002"
 
-typedef struct s_fork
-{
-	pthread_mutex_t	mutex;
-	bool			in_use;
-}					t_fork;
-
 typedef struct s_philo
 {
 	pthread_t		thread;
@@ -49,8 +43,8 @@ typedef struct s_philo
 	size_t			time_to_sleep;
 	size_t			start_time;
 	size_t			num_of_philos;
-	t_fork			*r_fork;
-	t_fork			*l_fork;
+	pthread_mutex_t	*r_fork;
+	pthread_mutex_t	*l_fork;
 	pthread_mutex_t	*dead_lock;
 	pthread_mutex_t	*meal_lock;
 	pthread_mutex_t	*print_lock;
@@ -67,7 +61,7 @@ typedef struct s_program
 	bool			forks_initialized;
 	bool			locks_initialized;
 	bool			*fork_in_use;
-	t_fork			*forks;
+	pthread_mutex_t			*forks;
 	pthread_mutex_t	dead_lock;
 	pthread_mutex_t	meal_lock;
 	pthread_mutex_t	print_lock;

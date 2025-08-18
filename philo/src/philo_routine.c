@@ -6,7 +6,7 @@
 /*   By: vtrofyme <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 12:46:22 by vtrofyme          #+#    #+#             */
-/*   Updated: 2025/08/18 11:09:16 by vtrofyme         ###   ########.fr       */
+/*   Updated: 2025/08/18 11:15:23 by vtrofyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,8 @@ static void	print_status(t_philo *philo, char *status)
 
 static void	eat(t_philo *philo)
 {
-	t_fork	*first_fork;
-	t_fork	*second_fork;
+	pthread_mutex_t	*first_fork;
+	pthread_mutex_t	*second_fork;
 
 	if (philo->l_fork < philo->r_fork)
 	{
@@ -85,9 +85,9 @@ static void	eat(t_philo *philo)
 		first_fork = philo->r_fork;
 		second_fork = philo->l_fork;
 	}
-	pthread_mutex_lock(&first_fork->mutex);
+	pthread_mutex_lock(first_fork);
 	print_status(philo, C_MAG "has taken a fork" C_RESET);
-	pthread_mutex_lock(&second_fork->mutex);
+	pthread_mutex_lock(second_fork);
 	print_status(philo, C_MAG "has taken a fork" C_RESET);
 	pthread_mutex_lock(philo->meal_lock);
 	philo->last_meal = get_timestamp();
@@ -95,14 +95,14 @@ static void	eat(t_philo *philo)
 	pthread_mutex_unlock(philo->meal_lock);
 	print_status(philo, C_GRN "is eating" C_RESET);
 	usleep(philo->time_to_eat * 1000);
-	pthread_mutex_unlock(&second_fork->mutex);
-	pthread_mutex_unlock(&first_fork->mutex);
+	pthread_mutex_unlock(second_fork);
+	pthread_mutex_unlock(first_fork);
 }
 
 static void	routine_of_one_philo(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->l_fork->mutex);
+	pthread_mutex_lock(philo->l_fork);
 	print_status(philo, "has taken a fork");
 	usleep(philo->time_to_die * 1000);
-	pthread_mutex_unlock(&philo->l_fork->mutex);
+	pthread_mutex_unlock(philo->l_fork);
 }
