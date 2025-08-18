@@ -6,7 +6,7 @@
 /*   By: vtrofyme <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 12:46:22 by vtrofyme          #+#    #+#             */
-/*   Updated: 2025/08/17 16:03:38 by vtrofyme         ###   ########.fr       */
+/*   Updated: 2025/08/18 11:09:16 by vtrofyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 static void	print_status(t_philo *philo, char *status);
 static void	eat(t_philo *philo);
-static void	ft_usleep(size_t ms);
+static void	routine_of_one_philo(t_philo *philo);
 
-size_t	get_timestamp()
+size_t	get_timestamp(void)
 {
-	struct timeval tv;
+	struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
 	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
@@ -30,13 +30,10 @@ void	*philo_routine(void *arg)
 
 	philo = (t_philo *)arg;
 	if (philo->id % 2 == 0)
-		ft_usleep(philo->time_to_eat / 2);
+		usleep(philo->time_to_eat / 2 * 1000);
 	if (philo->num_of_philos == 1)
 	{
-		pthread_mutex_lock(&philo->l_fork->mutex);
-		print_status(philo, "has taken a fork");
-		ft_usleep(philo->time_to_die);
-		pthread_mutex_unlock(&philo->l_fork->mutex);
+		routine_of_one_philo(philo);
 		return (NULL);
 	}
 	while (1)
@@ -50,7 +47,7 @@ void	*philo_routine(void *arg)
 		pthread_mutex_unlock(philo->dead_lock);
 		eat(philo);
 		print_status(philo, C_BLU "is sleeping" C_RESET);
-		ft_usleep(philo->time_to_sleep);
+		usleep(philo->time_to_sleep * 1000 + 300);
 		print_status(philo, C_YELLOW "is thinking" C_RESET);
 	}
 	return (NULL);
@@ -58,10 +55,9 @@ void	*philo_routine(void *arg)
 
 static void	print_status(t_philo *philo, char *status)
 {
-	size_t timestamp;
+	size_t	timestamp;
 
 	pthread_mutex_lock(philo->dead_lock);
-
 	if (*philo->dead)
 	{
 		pthread_mutex_unlock(philo->dead_lock);
@@ -76,36 +72,37 @@ static void	print_status(t_philo *philo, char *status)
 
 static void	eat(t_philo *philo)
 {
-	if (!philo->l_fork->in_use)
+	t_fork	*first_fork;
+	t_fork	*second_fork;
+
+	if (philo->l_fork < philo->r_fork)
 	{
-		pthread_mutex_lock(&philo->l_fork->mutex);
-		philo->l_fork->in_use = true;
-		print_status(philo, C_MAG "has taken a fork" C_RESET);
+		first_fork = philo->l_fork;
+		second_fork = philo->r_fork;
 	}
-	if (!philo->r_fork->in_use)
+	else
 	{
-		pthread_mutex_lock(&philo->r_fork->mutex);
-		philo->r_fork->in_use = true;
-		print_status(philo, C_MAG "has taken a fork" C_RESET);
+		first_fork = philo->r_fork;
+		second_fork = philo->l_fork;
 	}
+	pthread_mutex_lock(&first_fork->mutex);
+	print_status(philo, C_MAG "has taken a fork" C_RESET);
+	pthread_mutex_lock(&second_fork->mutex);
+	print_status(philo, C_MAG "has taken a fork" C_RESET);
 	pthread_mutex_lock(philo->meal_lock);
 	philo->last_meal = get_timestamp();
 	philo->meals_eaten++;
 	pthread_mutex_unlock(philo->meal_lock);
 	print_status(philo, C_GRN "is eating" C_RESET);
-	ft_usleep(philo->time_to_eat);
-	philo->l_fork->in_use = false;
-	pthread_mutex_unlock(&philo->r_fork->mutex);
-	philo->r_fork->in_use = false;
+	usleep(philo->time_to_eat * 1000);
+	pthread_mutex_unlock(&second_fork->mutex);
+	pthread_mutex_unlock(&first_fork->mutex);
+}
+
+static void	routine_of_one_philo(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->l_fork->mutex);
+	print_status(philo, "has taken a fork");
+	usleep(philo->time_to_die * 1000);
 	pthread_mutex_unlock(&philo->l_fork->mutex);
 }
-
-static void	ft_usleep(size_t ms)
-{
-	size_t	start;
-
-	start = get_timestamp();
-	while ((get_timestamp() - start) < ms)
-		usleep(500);
-}
-

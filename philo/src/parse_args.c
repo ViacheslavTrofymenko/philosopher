@@ -6,11 +6,11 @@
 /*   By: vtrofyme <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 13:00:04 by vtrofyme          #+#    #+#             */
-/*   Updated: 2025/08/15 10:00:26 by vtrofyme         ###   ########.fr       */
+/*   Updated: 2025/08/18 09:45:24 by vtrofyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "philo.h"
+#include "philo.h"
 
 static long	ft_atol(char *str)
 {
@@ -59,7 +59,7 @@ int	parse_args(int argc, char *argv[], t_program *pm)
 	while (argv[++i])
 	{
 		if (check_input(argv[i]) == 1)
-			return (printf(C_RED "Error: invalid argument values.\n" C_RESET), 1);
+			return (printf(C_RED "Error: invalid arg values.\n" C_RESET), 1);
 	}
 	pm->num_of_philos = (size_t)ft_atol(argv[1]);
 	pm->time_to_die = (size_t)ft_atol(argv[2]);
@@ -69,12 +69,11 @@ int	parse_args(int argc, char *argv[], t_program *pm)
 	if (argc == 6)
 		pm->num_times_to_eat = (int)ft_atol(argv[5]);
 	if (pm->num_of_philos == 0)
-		return (printf(C_RED "Error: number of philosophers must be greater than 1.\n" C_RESET), 1);
+		return (printf(C_RED "Error: num of philos must be > 1.\n" C_RESET), 1);
 	if (pm->time_to_die == 0 || pm->time_to_eat == 0 || pm->time_to_sleep == 0)
-		return (printf(C_RED "Error: time arguments must be greater than zero.\n" C_RESET), 1);
+		return (printf(C_RED "Error: time args must be > 0.\n" C_RESET), 1);
 	if (pm->num_times_to_eat < -1)
-		return (printf(C_RED "Error: number of times to eat must be >= 0 or omitted.\n" C_RESET), 1);
+		return (printf(C_RED "Error: num eats >= 0 / omitted.\n" C_RESET), 1);
 	pm->dead_flag = false;
 	return (0);
 }
-
